@@ -52,10 +52,19 @@ try:
             transaction_type = transaction[1]
 
             ### VALIDATION 1 ###
-
+            if transaction_type not in valid_transaction_types:
+                is_valid_record = False
+                validation_errors.append(f"Invalid transaction type: {transaction_type}")
             ### VALIDATION 2 ###
             # Gets the transaction amount from the third column
-            transaction_amount = float(transaction[2])
+            try:
+                transaction_amount = float(transaction[2])
+                if transaction_amount <= 0:
+                    is_valid_record = False
+                    validation_errors.append(f"Non-positive transaction amount: {transaction[2]}")
+            except ValueError:
+                is_valid_record = False
+                validation_errors.append(f"\"{transaction[2]}\" is an invalid transaction amount.")
 
             if is_valid_record:
                 # Initialize the customer's account balance if it doesn't 
@@ -79,7 +88,11 @@ try:
                     (transaction_amount, transaction_type))
             
             ### COLLECT INVALID RECORDS ###
-            pass
+            else:
+                rejected_transaction = (transaction, validation_errors)
+                rejected_transactions.append(rejected_transactions)
+
+            
 except FileNotFoundError:
     print(f"The bank data file ({DATA_FILENAME}) cannot be found.")
     exit()
@@ -87,6 +100,12 @@ except FileNotFoundError:
 report_title = "PiXELL River Transaction Report"
 print(report_title)
 print('=' * len(report_title))
+rejected_report_title = "REJECTED RECORDS"
+print(rejected_report_title)
+print('=' * len(rejected_report_title))
+
+for rejected_transaction in rejected_transactions:
+    print("REJECTED:", rejected_transaction)
 
 # Print the final account balances for each customer
 for customer_id, data in customer_data.items():

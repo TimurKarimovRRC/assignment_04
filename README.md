@@ -5,3 +5,7 @@
 I want to ensure all programs are correct, accurate and use exception handling appropriately,
 
 So that I can be assured of the quality of our software]
+
+## Code Modification 1
+
+- Added error handling when the data file is not within the application directory.
