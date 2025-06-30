@@ -67,30 +67,23 @@ try:
                 validation_errors.append(f"\"{transaction[2]}\" is an invalid transaction amount.")
 
             if is_valid_record:
-                # Initialize the customer's account balance if it doesn't 
-                # already exist
+                transaction_counter += 1
+                total_transaction_amount += transaction_amount
+
                 if customer_id not in customer_data:
                     customer_data[customer_id] = {'balance': 0, 'transactions': []}
-                
-                # Update the customer's account balance based on the 
-                # transaction type
-                elif transaction_type == 'deposit':
+
+                if transaction_type == 'deposit':
                     customer_data[customer_id]['balance'] += transaction_amount
-                    transaction_count += 1
-                    total_transaction_amount += transaction_amount
-                elif transaction_type == 'withdrawal':
-                    customer_data[customer_id]['balance'] += transaction_amount
-                    transaction_count += 1
-                    total_transaction_amount += transaction_amount
-                
-                # Record transactions in the customer's transaction history
+                elif transaction_type == 'withdraw':
+                    customer_data[customer_id]['balance'] -= transaction_amount
+
                 customer_data[customer_id]['transactions'].append(
-                    (transaction_amount, transaction_type))
-            
-            ### COLLECT INVALID RECORDS ###
+                    (transaction_amount, transaction_type)
+                )
             else:
                 rejected_transaction = (transaction, validation_errors)
-                rejected_transactions.append(rejected_transactions)
+                rejected_transactions.append(rejected_transaction)
 
             
 except FileNotFoundError:
@@ -100,12 +93,15 @@ except FileNotFoundError:
 report_title = "PiXELL River Transaction Report"
 print(report_title)
 print('=' * len(report_title))
+
+
 rejected_report_title = "REJECTED RECORDS"
 print(rejected_report_title)
 print('=' * len(rejected_report_title))
 
 for rejected_transaction in rejected_transactions:
-    print("REJECTED:", rejected_transaction)
+    record, errors = rejected_transaction
+    print(f"REJECTED: {record} | Errors: {errors}")
 
 # Print the final account balances for each customer
 for customer_id, data in customer_data.items():
@@ -120,12 +116,8 @@ for customer_id, data in customer_data.items():
         amount, type = transaction
         print(f"{type.capitalize():>16}:{amount:>12}")
 
-average_transaction_amount = total_transaction_amount / transaction_counter
-print(f"AVERAGE TRANSACTION AMOUNT: {average_transaction_amount}")
-
-rejected_report_title = "REJECTED RECORDS"
-print(rejected_report_title)
-print('=' * len(rejected_report_title))
-
-for rejected_transaction in rejected_transactions:
-    print("REJECTED:", rejected_transaction)
+if transaction_counter > 0:
+    average_transaction_amount = total_transaction_amount / transaction_counter
+    print(f"AVERAGE TRANSACTION AMOUNT: ${average_transaction_amount:,.2f}")
+else:
+    print("AVERAGE TRANSACTION AMOUNT: N/A (No valid transactions)")
