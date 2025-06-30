@@ -5,8 +5,8 @@ Example:
     $ python pixell_transaction_report.py
 """
 
-__author__ = ""
-__version__ = ""
+__author__ = "Timur Karimov"
+__version__ = "1.0.0"
 __credits__ = "COMP-1327 Faculty"
 
 import csv
