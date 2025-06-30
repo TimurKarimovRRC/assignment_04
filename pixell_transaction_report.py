@@ -99,9 +99,6 @@ rejected_report_title = "REJECTED RECORDS"
 print(rejected_report_title)
 print('=' * len(rejected_report_title))
 
-for rejected_transaction in rejected_transactions:
-    record, errors = rejected_transaction
-    print(f"REJECTED: {record} | Errors: {errors}")
 
 # Print the final account balances for each customer
 for customer_id, data in customer_data.items():
@@ -121,3 +118,11 @@ if transaction_counter > 0:
     print(f"AVERAGE TRANSACTION AMOUNT: ${average_transaction_amount:,.2f}")
 else:
     print("AVERAGE TRANSACTION AMOUNT: N/A (No valid transactions)")
+
+
+rejected_report_title = "REJECTED RECORDS"
+print(rejected_report_title)
+print('=' * len(rejected_report_title))
+for rejected_transaction in rejected_transactions:
+    record, errors = rejected_transaction
+    print(f"REJECTED: {record} | Errors: {errors}")
