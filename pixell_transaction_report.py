@@ -95,9 +95,6 @@ print(report_title)
 print('=' * len(report_title))
 
 
-rejected_report_title = "REJECTED RECORDS"
-print(rejected_report_title)
-print('=' * len(rejected_report_title))
 
 
 # Print the final account balances for each customer
